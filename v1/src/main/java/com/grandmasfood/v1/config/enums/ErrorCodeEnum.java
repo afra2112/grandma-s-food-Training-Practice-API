@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCodeEnum {
-    ERR001("USER_ALREADY_EXISTS"),
+    ERR001("ENTITY_ALREADY_EXISTS"),
     ERR002("SPRING_VALIDATION_EXCEPTION"),
     ERR003("SERVER_ERROR"),
     ERR004("ENTITY_NOT_FOUND"),

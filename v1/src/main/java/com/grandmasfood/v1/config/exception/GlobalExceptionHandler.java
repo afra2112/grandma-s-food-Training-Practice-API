@@ -1,10 +1,10 @@
 package com.grandmasfood.v1.config.exception;
 
 import com.grandmasfood.v1.config.enums.ErrorCodeEnum;
+import com.grandmasfood.v1.exception.EntityNotFoundException;
 import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
-import com.grandmasfood.v1.exception.UserAlreadyExistsException;
+import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,8 +43,8 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ApiErrorResponse> hanleUserAlreadyExistsExeption(UserAlreadyExistsException ex){
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> hanleEntityAlreadyExistsExeption(EntityAlreadyExistsException ex){
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(buildApiError(
