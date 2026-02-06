@@ -1,6 +1,7 @@
 package com.grandmasfood.v1.config.exception;
 
 import com.grandmasfood.v1.config.enums.ErrorCodeEnum;
+import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
 import com.grandmasfood.v1.exception.UserAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new SpringValidationErrorResponse(
-                        ErrorCodeEnum.SPRING_VALIDATION_EXCEPTION,
+                        ErrorCodeEnum.ERR002,
                         Instant.now(),
                         "Bad request, spring validation found the following errors: ",
                         ex.getClass().getSimpleName(),
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(buildApiError(
-                        ErrorCodeEnum.USER_ALREADY_EXISTS,
+                        ErrorCodeEnum.ERR001,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));
@@ -58,7 +59,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(buildApiError(
-                        ErrorCodeEnum.SERVER_ERROR,
+                        ErrorCodeEnum.ERR003,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));
@@ -69,7 +70,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(buildApiError(
-                        ErrorCodeEnum.ENTITY_NOT_FOUND,
+                        ErrorCodeEnum.ERR004,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));
@@ -80,7 +81,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(buildApiError(
-                        ErrorCodeEnum.CONSTRAINT_VALIDATION_EXCEPTION,
+                        ErrorCodeEnum.ERR005,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
+
+    @ExceptionHandler(SameDataRequestComparedToDBException.class)
+    public ResponseEntity<ApiErrorResponse> handleSameDataRequest(SameDataRequestComparedToDBException ex){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(buildApiError(
+                        ErrorCodeEnum.ERR006,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));

@@ -4,12 +4,16 @@ import com.grandmasfood.v1.config.exception.EntityNotFoundException;
 import com.grandmasfood.v1.config.mapper.CustomerMapper;
 import com.grandmasfood.v1.dto.CustomerRequest;
 import com.grandmasfood.v1.dto.CustomerResponse;
+import com.grandmasfood.v1.dto.UpdateCustomerRequest;
 import com.grandmasfood.v1.entity.Customer;
+import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
 import com.grandmasfood.v1.exception.UserAlreadyExistsException;
 import com.grandmasfood.v1.repository.CustomerRepository;
 import com.grandmasfood.v1.service.CustomerService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -35,8 +39,34 @@ public class CustomerServiceImplement implements CustomerService {
     }
 
     @Override
-    public CustomerResponse updateCustomerByDocument(String document) {
-        return null;
+    public void updateCustomerByDocument(UpdateCustomerRequest request, String document) {
+        Customer customer = customerRepository.findByDocument(document).orElseThrow(
+                () -> new EntityNotFoundException(Customer.class.getSimpleName(), document)
+        );
+
+        validateAtLeastOneDifferentField(customer, request);
+
+        updateUser(customer, request);
+    }
+
+    private void validateAtLeastOneDifferentField(Customer customer, UpdateCustomerRequest request){
+        boolean sameEmail = Objects.equals(customer.getEmail(), request.email());
+        boolean sameNameAndSurname = Objects.equals(customer.getNameAndSurname(), request.nameAndSurname());
+        boolean sameShippingAddress = Objects.equals(customer.getShippingAddress(), request.shippingAddress());
+        boolean samePhoneNumber = Objects.equals(customer.getPhoneNumber(), request.phoneNumber());
+
+        if (sameEmail && sameShippingAddress && samePhoneNumber && sameNameAndSurname){
+            throw new SameDataRequestComparedToDBException("Same data compared to db, expected different data to update.");
+        }
+    }
+
+    private void updateUser(Customer customer, UpdateCustomerRequest request){
+        customer.setEmail(request.email());
+        customer.setNameAndSurname(request.nameAndSurname());
+        customer.setShippingAddress(request.shippingAddress());
+        customer.setPhoneNumber(request.phoneNumber());
+
+        customerRepository.save(customer);
     }
 
     private Customer buildCustomerFromRequest(CustomerRequest request){

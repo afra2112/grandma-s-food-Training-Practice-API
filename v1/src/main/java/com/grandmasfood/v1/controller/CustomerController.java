@@ -3,9 +3,11 @@ package com.grandmasfood.v1.controller;
 import com.grandmasfood.v1.config.customBeans.Document;
 import com.grandmasfood.v1.dto.CustomerRequest;
 import com.grandmasfood.v1.dto.CustomerResponse;
+import com.grandmasfood.v1.dto.UpdateCustomerRequest;
 import com.grandmasfood.v1.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +34,14 @@ public class CustomerController {
     }
 
     @PutMapping("/{document}")
-    public ResponseEntity<CustomerResponse> updateCustomerData(
+    public ResponseEntity<HttpStatus> updateCustomerData(
             @PathVariable @Document
-            String document
+            String document,
+
+            @Valid @RequestBody
+            UpdateCustomerRequest request
     ){
-        return ResponseEntity.ok(customerService.updateCustomerByDocument(document));
+        customerService.updateCustomerByDocument(request, document);
+        return ResponseEntity.ok(HttpStatus.NO_CONTENT);
     }
 }
