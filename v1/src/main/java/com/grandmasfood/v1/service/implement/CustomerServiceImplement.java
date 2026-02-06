@@ -34,6 +34,11 @@ public class CustomerServiceImplement implements CustomerService {
         ));
     }
 
+    @Override
+    public CustomerResponse updateCustomerByDocument(String document) {
+        return null;
+    }
+
     private Customer buildCustomerFromRequest(CustomerRequest request){
         return new Customer(
                 request.document(),

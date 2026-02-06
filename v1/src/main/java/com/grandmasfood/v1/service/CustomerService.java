@@ -10,4 +10,6 @@ public interface CustomerService {
     CustomerResponse createCustomer(CustomerRequest request);
 
     CustomerResponse getCustomerByDocument(String document);
+
+    CustomerResponse updateCustomerByDocument(String document);
 }

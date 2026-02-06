@@ -1,14 +1,11 @@
 package com.grandmasfood.v1.dto;
 
+import com.grandmasfood.v1.config.customBeans.Document;
+import com.grandmasfood.v1.config.customBeans.PhoneNumber;
 import jakarta.validation.constraints.*;
 
 public record CustomerRequest(
-        @NotBlank
-        @Pattern(
-                regexp = "^(CC|TI|CE|P)-\\d{1,17}$",
-                message = "The customer document must be like (document type-number) ex: 'CC-1234567890'"
-        )
-        @Size(max = 20)
+        @Document
         String document,
 
         @NotBlank
@@ -18,12 +15,7 @@ public record CustomerRequest(
         @NotBlank
         String email,
 
-        @NotBlank
-        @Pattern(
-                regexp = "^[0-9]{10}$",
-                message = "phone number must have 10 digits, ex: 3101234567"
-        )
-        @Size(max = 10)
+        @PhoneNumber
         String phoneNumber,
 
         @NotBlank

@@ -1,5 +1,6 @@
 package com.grandmasfood.v1.dto;
 
+import com.grandmasfood.v1.config.customBeans.Document;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
@@ -10,12 +11,7 @@ public record OrderRequest (
         @NotNull
         LocalDateTime orderDateAndTime,
 
-        @NotBlank
-        @Pattern(
-                regexp = "^(CC|TI|CE|P)-\\d{1,17}$",
-                message = "The customer document must be like (document type-number) ex: 'CC-1234567890'"
-        )
-        @Size(max = 20)
+        @Document
         String customerDocument,
 
         @NotNull
