@@ -2,6 +2,10 @@ package com.grandmasfood.v1.entity;
 
 import com.grandmasfood.v1.config.enums.ProductCategoryEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,4 +41,12 @@ public class Product {
 
     @Column(nullable = false)
     private boolean available = false;
+
+    public Product(String name, ProductCategoryEnum category, String description, BigDecimal price, boolean available) {
+        this.name = name;
+        this.category = category;
+        this.description = description;
+        this.basePrice = price;
+        this.available = available;
+    }
 }

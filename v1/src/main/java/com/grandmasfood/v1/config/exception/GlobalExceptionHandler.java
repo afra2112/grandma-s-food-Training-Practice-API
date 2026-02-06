@@ -1,15 +1,16 @@
 package com.grandmasfood.v1.config.exception;
 
 import com.grandmasfood.v1.config.enums.ErrorCodeEnum;
+import com.grandmasfood.v1.exception.EntityNotFoundException;
 import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
-import com.grandmasfood.v1.exception.UserAlreadyExistsException;
+import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -43,8 +44,8 @@ public class GlobalExceptionHandler {
                 ));
     }
 
-    @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<ApiErrorResponse> hanleUserAlreadyExistsExeption(UserAlreadyExistsException ex){
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> hanleEntityAlreadyExistsExeption(EntityAlreadyExistsException ex){
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(buildApiError(
@@ -93,6 +94,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(buildApiError(
                         ErrorCodeEnum.ERR006,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiErrorResponse> handleUUIDValidatorException(MethodArgumentNotValidException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildApiError(
+                        ErrorCodeEnum.ERR007,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));

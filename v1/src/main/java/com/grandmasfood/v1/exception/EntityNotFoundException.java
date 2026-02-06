@@ -1,4 +1,4 @@
-package com.grandmasfood.v1.config.exception;
+package com.grandmasfood.v1.exception;
 
 public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(String entity, String identification) {
