@@ -8,6 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -34,4 +38,15 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal subtotal;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal iva = BigDecimal.valueOf(1.19);
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal total;
+    @Column(nullable = false)
+    private boolean delivered = false;
+    @Column(nullable = false)
+    private LocalDateTime deliveryDate = null;
 }

@@ -8,9 +8,6 @@ import java.util.UUID;
 
 public record OrderRequest (
 
-        @NotNull
-        LocalDateTime orderDateAndTime,
-
         @Document
         String customerDocument,
 
