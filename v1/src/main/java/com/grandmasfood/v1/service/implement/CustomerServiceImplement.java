@@ -24,7 +24,7 @@ public class CustomerServiceImplement implements CustomerService {
 
     @Override
     public CustomerResponse createCustomer(CustomerRequest request) {
-        if (customerRepository.existsByDocument(request.document())){
+        if (customerRepository.existsByDocumentAndDeletedFalse(request.document())){
             throw new UserAlreadyExistsException("Customer already Exists by the document: " + request.document());
         }
 
@@ -33,20 +33,30 @@ public class CustomerServiceImplement implements CustomerService {
 
     @Override
     public CustomerResponse getCustomerByDocument(String document) {
-        return customerMapper.toDto(customerRepository.findByDocument(document).orElseThrow(
+        return customerMapper.toDto(customerRepository.findByDocumentAndDeletedFalse(document).orElseThrow(
                 () -> new EntityNotFoundException(Customer.class.getSimpleName(), document)
         ));
     }
 
     @Override
     public void updateCustomerByDocument(UpdateCustomerRequest request, String document) {
-        Customer customer = customerRepository.findByDocument(document).orElseThrow(
+        Customer customer = customerRepository.findByDocumentAndDeletedFalse(document).orElseThrow(
                 () -> new EntityNotFoundException(Customer.class.getSimpleName(), document)
         );
 
         validateAtLeastOneDifferentField(customer, request);
 
         updateUser(customer, request);
+    }
+
+    @Override
+    public void deleteCustomerByDocument(String document) {
+        Customer customer = customerRepository.findByDocumentAndDeletedFalse(document).orElseThrow(
+                () -> new EntityNotFoundException(Customer.class.getSimpleName(), document)
+        );
+
+        customer.setDeleted(true);
+        customerRepository.save(customer);
     }
 
     private void validateAtLeastOneDifferentField(Customer customer, UpdateCustomerRequest request){

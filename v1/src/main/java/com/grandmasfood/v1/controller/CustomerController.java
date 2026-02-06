@@ -44,4 +44,10 @@ public class CustomerController {
         customerService.updateCustomerByDocument(request, document);
         return ResponseEntity.ok(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/{document}")
+    public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable @Document String document){
+        customerService.deleteCustomerByDocument(document);
+        return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+    }
 }

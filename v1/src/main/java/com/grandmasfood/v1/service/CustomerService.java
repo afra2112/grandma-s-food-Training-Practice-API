@@ -13,4 +13,6 @@ public interface CustomerService {
     CustomerResponse getCustomerByDocument(String document);
 
     void updateCustomerByDocument(UpdateCustomerRequest request, String document);
+
+    void deleteCustomerByDocument(String document);
 }

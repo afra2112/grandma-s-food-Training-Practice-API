@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
-    Optional<Customer> findByDocument(String document);
-    boolean existsByDocument(String document);
+    Optional<Customer> findByDocumentAndDeletedFalse(String document);
+    boolean existsByDocumentAndDeletedFalse(String document);
 }
