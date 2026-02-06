@@ -1,0 +1,13 @@
+POST http://localhost:8080/api/v1/customers
+Content-Type: application/json
+
+{
+  "document": "CC-1094247745",
+  "nameAndSurname": "Andres Ramirez",
+  "email": "andres@gmail.com",
+  "phoneNumber": "3102162732",
+  "shippingAddress": "Calle 130 c #121 c - 10"
+}
+###
+
+GET http://localhost:8080/api/v1/customers/C1094247747

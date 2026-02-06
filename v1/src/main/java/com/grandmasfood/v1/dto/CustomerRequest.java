@@ -3,9 +3,6 @@ package com.grandmasfood.v1.dto;
 import jakarta.validation.constraints.*;
 
 public record CustomerRequest(
-        @NotNull
-        Long customerId,
-
         @NotBlank
         @Pattern(
                 regexp = "^(CC|TI|CE|P)-\\d{1,17}$",

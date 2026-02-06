@@ -37,4 +37,7 @@ public class Product {
     @Column(nullable = false)
     private boolean available = false;
 
+    @ManyToOne
+    @JoinColumn(name = "customerId")
+    private Customer customer;
 }

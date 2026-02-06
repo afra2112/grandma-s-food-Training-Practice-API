@@ -1,5 +1,6 @@
 package com.grandmasfood.v1.service.implement;
 
+import com.grandmasfood.v1.config.exception.EntityNotFoundException;
 import com.grandmasfood.v1.config.mapper.CustomerMapper;
 import com.grandmasfood.v1.dto.CustomerRequest;
 import com.grandmasfood.v1.dto.CustomerResponse;
@@ -24,6 +25,13 @@ public class CustomerServiceImplement implements CustomerService {
         }
 
         return customerMapper.toDto(customerRepository.save(buildCustomerFromRequest(request)));
+    }
+
+    @Override
+    public CustomerResponse getCustomerByDocument(String document) {
+        return customerMapper.toDto(customerRepository.findByDocument(document).orElseThrow(
+                () -> new EntityNotFoundException(Customer.class.getSimpleName(), document)
+        ));
     }
 
     private Customer buildCustomerFromRequest(CustomerRequest request){

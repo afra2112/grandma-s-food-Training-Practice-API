@@ -33,5 +33,10 @@ public class Customer {
     private String shippingAddress;
 
     public Customer(String document, String nameAndSurname, String email, String phoneNumber, String shippingAddress) {
+        this.document = document;
+        this.nameAndSurname = nameAndSurname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.shippingAddress = shippingAddress;
     }
 }

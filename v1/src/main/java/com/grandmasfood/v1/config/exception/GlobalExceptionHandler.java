@@ -2,6 +2,7 @@ package com.grandmasfood.v1.config.exception;
 
 import com.grandmasfood.v1.config.enums.ErrorCodeEnum;
 import com.grandmasfood.v1.exception.UserAlreadyExistsException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,39 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(buildApiError(
                         ErrorCodeEnum.USER_ALREADY_EXISTS,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex){
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(buildApiError(
+                        ErrorCodeEnum.SERVER_ERROR,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleEntityNotFoundException(EntityNotFoundException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(buildApiError(
+                        ErrorCodeEnum.ENTITY_NOT_FOUND,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidatedControllerAnotation(ConstraintViolationException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildApiError(
+                        ErrorCodeEnum.CONSTRAINT_VALIDATION_EXCEPTION,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));
