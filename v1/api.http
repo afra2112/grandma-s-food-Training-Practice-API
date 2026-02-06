@@ -38,3 +38,15 @@ Content-Type: application/json
 
 GET http://localhost:8080/api/v1/products/13f9ef23-7a9f-4221-8191-e1b16d355708
 ###
+
+PUT http://localhost:8080/api/v1/products/5db95527-72d4-4856-9a8d-13f3f33f4dc6
+Content-Type: application/json
+
+{
+  "fantasyName": "CHEESE HAMBURGUER BIG COMBO",
+  "category": "FISH",
+  "description": "descripcion prueba",
+  "price": 30000.00,
+  "available": true
+}
+###

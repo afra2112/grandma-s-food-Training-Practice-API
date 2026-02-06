@@ -12,4 +12,6 @@ public interface ProductService {
     ProductResponse createProduct(ProductRequest request);
 
     ProductResponse getProductByUUID(UUID uuid);
+
+    void updateProductByUUID(ProductRequest request, UUID uuid);
 }

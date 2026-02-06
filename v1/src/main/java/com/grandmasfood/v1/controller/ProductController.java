@@ -5,6 +5,7 @@ import com.grandmasfood.v1.dto.ProductResponse;
 import com.grandmasfood.v1.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,5 +28,11 @@ public class ProductController {
     @GetMapping("/{uuid}")
     public ResponseEntity<ProductResponse> getProductByUUID(@PathVariable UUID uuid){
         return ResponseEntity.ok(productService.getProductByUUID(uuid));
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<HttpStatus> updateProduct(@PathVariable UUID uuid, @Valid @RequestBody ProductRequest request){
+        productService.updateProductByUUID(request, uuid);
+        return ResponseEntity.ok(HttpStatus.NO_CONTENT);
     }
 }
