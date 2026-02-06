@@ -6,11 +6,12 @@ import com.grandmasfood.v1.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
+@Validated
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/products")
@@ -21,5 +22,10 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request){
         return ResponseEntity.ok(productService.createProduct(request));
+    }
+
+    @GetMapping("/{uuid}")
+    public ResponseEntity<ProductResponse> getProductByUUID(@PathVariable UUID uuid){
+        return ResponseEntity.ok(productService.getProductByUUID(uuid));
     }
 }
