@@ -31,4 +31,7 @@ public class Customer {
 
     @Column(nullable = false, length = 500)
     private String shippingAddress;
+
+    public Customer(String document, String nameAndSurname, String email, String phoneNumber, String shippingAddress) {
+    }
 }
