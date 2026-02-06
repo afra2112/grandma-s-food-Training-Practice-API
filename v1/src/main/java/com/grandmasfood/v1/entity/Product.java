@@ -15,6 +15,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "products")
 public class Product {
 
     @Id
@@ -36,5 +37,4 @@ public class Product {
 
     @Column(nullable = false)
     private boolean available = false;
-
 }

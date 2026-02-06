@@ -6,11 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "customers")
 public class Customer {
 
     @Id
@@ -32,6 +36,20 @@ public class Customer {
     @Column(nullable = false, length = 500)
     private String shippingAddress;
 
+    private boolean deleted = false;
+
+    @OneToMany(
+            mappedBy = "customer",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL
+    )
+    private Set<Order> orders = new HashSet<>();
+
     public Customer(String document, String nameAndSurname, String email, String phoneNumber, String shippingAddress) {
+        this.document = document;
+        this.nameAndSurname = nameAndSurname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.shippingAddress = shippingAddress;
     }
 }

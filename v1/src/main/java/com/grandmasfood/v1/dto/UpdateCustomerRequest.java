@@ -1,13 +1,11 @@
 package com.grandmasfood.v1.dto;
 
-import com.grandmasfood.v1.config.customBeans.Document;
 import com.grandmasfood.v1.config.customBeans.PhoneNumber;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-public record CustomerRequest(
-        @Document
-        String document,
-
+public record UpdateCustomerRequest(
         @NotBlank
         String nameAndSurname,
 
