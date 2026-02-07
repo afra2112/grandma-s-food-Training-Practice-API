@@ -59,6 +59,13 @@ public class ProductServiceImplement implements ProductService {
         productRepository.delete(product);
     }
 
+    @Override
+    public Product findByUUIDName(UUID uuid) {
+        return productRepository.findByProductId(uuid).orElseThrow(
+                () -> new EntityNotFoundException(Product.class.getSimpleName(), uuid.toString())
+        );
+    }
+
     private Product mapEntityToUpdate(Product product, ProductRequest request){
         product.setAvailable(request.available());
         product.setName(request.fantasyName());

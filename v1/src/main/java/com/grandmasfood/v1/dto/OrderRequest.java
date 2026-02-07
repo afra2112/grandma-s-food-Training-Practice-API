@@ -2,14 +2,9 @@ package com.grandmasfood.v1.dto;
 
 import com.grandmasfood.v1.config.customBeans.Document;
 import jakarta.validation.constraints.*;
-
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record OrderRequest (
-
-        @NotNull
-        LocalDateTime orderDateAndTime,
 
         @Document
         String customerDocument,
@@ -17,11 +12,11 @@ public record OrderRequest (
         @NotNull
         UUID productId,
 
+        @NotNull
         @Positive
-        @Size(max = 99)
-        int quantity,
+        @Max(99)
+        Integer quantity,
 
-        @Null
         @Size(max = 511)
         String additionalInfo
 ) {
