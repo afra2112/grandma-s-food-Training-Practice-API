@@ -6,6 +6,7 @@ import com.grandmasfood.v1.dto.OrderResponse;
 import com.grandmasfood.v1.entity.Customer;
 import com.grandmasfood.v1.entity.Order;
 import com.grandmasfood.v1.entity.Product;
+import com.grandmasfood.v1.exception.EntityNotFoundException;
 import com.grandmasfood.v1.repository.OrderRepository;
 import com.grandmasfood.v1.service.CustomerService;
 import com.grandmasfood.v1.service.OrderService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +35,17 @@ public class OrderServiceImplement implements OrderService {
         BigDecimal subtotal = calculateSubtotal(product.getBasePrice(), request.quantity());
 
         return orderMapper.toDtoResponse(orderRepository.save(buildOrderToCreate(request, customer, product, subtotal)));
+    }
+
+    @Override
+    public OrderResponse updateDeliveryTime(UUID orderUUID, LocalDateTime timestamp) {
+        Order order = orderRepository.findByOrderUUID(orderUUID).orElseThrow(
+                () -> new EntityNotFoundException(Order.class.getSimpleName(), orderUUID.toString())
+        );
+
+        order.setDeliveryDate(timestamp);
+
+        return orderMapper.toDtoResponse(orderRepository.save(order));
     }
 
     public Order buildOrderToCreate(OrderRequest request, Customer customer, Product product, BigDecimal sutotal){
