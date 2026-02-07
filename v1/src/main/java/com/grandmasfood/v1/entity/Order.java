@@ -1,6 +1,7 @@
 package com.grandmasfood.v1.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -24,9 +26,14 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Positive
-    @Size(max = 99)
-    private int quantity;
+    @Column(nullable = false, unique = true, updatable = false)
+    private UUID orderUUID;
+
+    @Column(nullable = false)
+    private LocalDateTime orderCreatedAt;
+
+    @Column(nullable = false)
+    private Integer quantity;
 
     @Column(columnDefinition = "TEXT", length = 511)
     private String additionalInfo;
@@ -49,4 +56,11 @@ public class Order {
     private boolean delivered = false;
     @Column(nullable = false)
     private LocalDateTime deliveryDate = null;
+
+    @PrePersist
+    private void generateUUID(){
+        if (orderUUID == null){
+            orderUUID = UUID.randomUUID();
+        }
+    }
 }

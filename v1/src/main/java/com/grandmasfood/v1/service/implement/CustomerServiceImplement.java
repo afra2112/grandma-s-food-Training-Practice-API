@@ -59,6 +59,13 @@ public class CustomerServiceImplement implements CustomerService {
         customerRepository.save(customer);
     }
 
+    @Override
+    public Customer findByDocument(String document) {
+        return customerRepository.findByDocumentAndDeletedFalse(document).orElseThrow(
+                () -> new EntityNotFoundException(Customer.class.getSimpleName(), document)
+        );
+    }
+
     private void validateAtLeastOneDifferentField(Customer customer, UpdateCustomerRequest request){
         boolean sameEmail = Objects.equals(customer.getEmail(), request.email());
         boolean sameNameAndSurname = Objects.equals(customer.getNameAndSurname(), request.nameAndSurname());

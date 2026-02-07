@@ -5,11 +5,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record OrderResponse (
+        UUID orderUUID,
+        LocalDateTime orderCreatedAt,
         String customerDocument,
-        UUID productId,
+        UUID productUUID,
         int quantity,
         String additionalInfo,
-        CustomerResponse customer,
         BigDecimal subtotal,
         BigDecimal iva,
         BigDecimal total,
