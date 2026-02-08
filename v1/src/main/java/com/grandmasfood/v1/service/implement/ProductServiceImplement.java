@@ -12,6 +12,7 @@ import com.grandmasfood.v1.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -64,6 +65,13 @@ public class ProductServiceImplement implements ProductService {
         return productRepository.findByProductId(uuid).orElseThrow(
                 () -> new EntityNotFoundException(Product.class.getSimpleName(), uuid.toString())
         );
+    }
+
+    @Override
+    public List<ProductResponse> findByFantasyNameLike(String q) {
+        return productRepository.findByNameContainingIgnoreCase(q).stream().map(
+                productMapper::toDto
+        ).toList();
     }
 
     private Product mapEntityToUpdate(Product product, ProductRequest request){
