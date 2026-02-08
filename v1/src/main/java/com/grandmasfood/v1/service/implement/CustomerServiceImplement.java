@@ -1,5 +1,7 @@
 package com.grandmasfood.v1.service.implement;
 
+import com.grandmasfood.v1.config.enums.OrderByEnum;
+import com.grandmasfood.v1.config.enums.OrderDirectionEnum;
 import com.grandmasfood.v1.exception.EntityNotFoundException;
 import com.grandmasfood.v1.config.mapper.CustomerMapper;
 import com.grandmasfood.v1.dto.CustomerRequest;
@@ -11,8 +13,10 @@ import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
 import com.grandmasfood.v1.repository.CustomerRepository;
 import com.grandmasfood.v1.service.CustomerService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -64,6 +68,12 @@ public class CustomerServiceImplement implements CustomerService {
         return customerRepository.findByDocumentAndDeletedFalse(document).orElseThrow(
                 () -> new EntityNotFoundException(Customer.class.getSimpleName(), document)
         );
+    }
+
+    @Override
+    public List<CustomerResponse> findOrderedByAndDirection(OrderByEnum orderBy, Sort.Direction direction) {
+        List<Customer> customers = customerRepository.findAll(Sort.by(direction, orderBy.getDbFieldName()));
+        return customers.stream().map(customerMapper::toDto).toList();
     }
 
     private void validateAtLeastOneDifferentField(Customer customer, UpdateCustomerRequest request){
