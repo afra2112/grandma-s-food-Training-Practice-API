@@ -69,3 +69,7 @@ PATCH http://localhost:8080/api/v1/orders/f9a0a9d4-d56b-4486-b471-939724a74efa/d
 ###
 
 GET http://localhost:8080/api/v1/customers?orderBy=ADDRESS&direction=ASC
+###
+
+GET http://localhost:8080/api/v1/products/search
+###

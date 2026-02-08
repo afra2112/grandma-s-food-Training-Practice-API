@@ -4,12 +4,15 @@ import com.grandmasfood.v1.dto.ProductRequest;
 import com.grandmasfood.v1.dto.ProductResponse;
 import com.grandmasfood.v1.service.ProductService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Validated
@@ -40,5 +43,10 @@ public class ProductController {
     public ResponseEntity<HttpStatus> deleteProduct(@PathVariable UUID uuid){
         productService.deleteProductByUUID(uuid);
         return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponse>> getByFantasyNameLike(@RequestParam String q){
+        return ResponseEntity.ok(productService.findByFantasyNameLike(q));
     }
 }
