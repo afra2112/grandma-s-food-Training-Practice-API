@@ -2,10 +2,10 @@ POST http://localhost:8080/api/v1/products
 Content-Type: application/json
 
 {
-  "fantasyName": "Tomahawk",
-  "category": "MEATS",
-  "description": "Big meat steak",
-  "price": 45000.00,
+  "fantasyName": "Non sales product",
+  "category": "FISH",
+  "description": "non sales",
+  "price": 2000.00,
   "available": true
 }
 ###
@@ -29,4 +29,7 @@ DELETE http://localhost:8080/api/v1/products/5db95527-72d4-4856-9a8d-13f3f33f4dc
 ###
 
 GET http://localhost:8080/api/v1/products/search
+###
+
+GET http://localhost:8080/api/v1/products/sales_report/20260101/20260209
 ###

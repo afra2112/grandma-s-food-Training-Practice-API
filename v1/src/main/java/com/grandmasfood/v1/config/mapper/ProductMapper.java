@@ -1,8 +1,8 @@
 package com.grandmasfood.v1.config.mapper;
 
+import com.grandmasfood.v1.dto.MostOrLessSoldProductResponse;
 import com.grandmasfood.v1.dto.ProductRequest;
 import com.grandmasfood.v1.dto.ProductResponse;
-import com.grandmasfood.v1.dto.SingleProductToReportResponse;
 import com.grandmasfood.v1.entity.Product;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +20,10 @@ public class ProductMapper {
         );
     }
 
-    public SingleProductToReportResponse toSingleProductReportResponse(Product entity){
-        return new SingleProductToReportResponse(
-                entity.getSells(),
+    public MostOrLessSoldProductResponse toMostOrLessProductResponse(Product entity){
+        return new MostOrLessSoldProductResponse(
+                entity.getName(),
+                Long.valueOf(entity.getSells()),
                 entity.getBasePrice()
         );
     }

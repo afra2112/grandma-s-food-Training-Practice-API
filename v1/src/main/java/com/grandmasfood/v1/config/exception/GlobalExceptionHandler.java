@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 @RestControllerAdvice
@@ -102,7 +103,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiErrorResponse> handleUUIDValidatorException(MethodArgumentNotValidException ex){
+    public ResponseEntity<ApiErrorResponse> handleUUIDValidatorException(MethodArgumentTypeMismatchException ex){
+        if (ex.getRequiredType() == LocalDate.class){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(buildApiError(
+                            ErrorCodeEnum.ERR010,
+                            "Invalid date format, expected yyyyMMdd. MM cannot be grater than 12 and dd cannot be grater than 31",
+                            "InvalidDateFormat"
+                    ));
+        }
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(buildApiError(

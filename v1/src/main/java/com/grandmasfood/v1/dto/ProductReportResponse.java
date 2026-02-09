@@ -4,8 +4,10 @@ import jakarta.annotation.Nullable;
 import java.util.List;
 
 public record ProductReportResponse(
-        List<SingleProductToReportResponse> productsWithSells,
+        List<MostOrLessSoldProductResponse> productsWithSells,
+        @Nullable
         String mostSoldProductName,
+        @Nullable
         String lessSoldProductName,
         @Nullable
         List<MostOrLessSoldProductResponse> mostSoldProducts,

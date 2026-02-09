@@ -5,8 +5,7 @@ import com.grandmasfood.v1.dto.ProductRequest;
 import com.grandmasfood.v1.dto.ProductResponse;
 import com.grandmasfood.v1.entity.Product;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,7 +24,7 @@ public interface ProductService {
 
     List<ProductResponse> findByFantasyNameLike(String q);
 
-    ProductReportResponse generateReportByDatesRange(LocalDateTime date1, LocalDateTime date2);
+    ProductReportResponse generateReportByDatesRange(LocalDate date1, LocalDate date2);
 
     void increaseSells(UUID productUUID, Integer quantity);
 }

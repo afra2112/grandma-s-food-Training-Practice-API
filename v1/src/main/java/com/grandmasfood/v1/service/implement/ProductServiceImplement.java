@@ -1,25 +1,25 @@
 package com.grandmasfood.v1.service.implement;
 
 import com.grandmasfood.v1.config.mapper.ProductMapper;
-import com.grandmasfood.v1.dto.ProductReportResponse;
-import com.grandmasfood.v1.dto.ProductRequest;
-import com.grandmasfood.v1.dto.ProductResponse;
-import com.grandmasfood.v1.dto.SingleProductToReportResponse;
+import com.grandmasfood.v1.dto.*;
 import com.grandmasfood.v1.entity.Product;
 import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
 import com.grandmasfood.v1.exception.EntityNotFoundException;
 import com.grandmasfood.v1.exception.InvalidDateToProductReportException;
 import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
 import com.grandmasfood.v1.repository.ProductRepository;
+import com.grandmasfood.v1.service.OrderService;
 import com.grandmasfood.v1.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -80,22 +80,35 @@ public class ProductServiceImplement implements ProductService {
     }
 
     @Override
-    public ProductReportResponse generateReportByDatesRange(LocalDateTime date1, LocalDateTime date2) {
-        if (date2.isBefore(date1) || date2.isBefore(date1.plusDays(1))){
-            throw new InvalidDateToProductReportException("Invalid date, expected date2 at least one day after date 1 or date2 after date1");
+    public ProductReportResponse generateReportByDatesRange(LocalDate date1, LocalDate date2) {
+        if (date2.isBefore(date1.plusDays(1)) || date2.isAfter(LocalDate.now())){
+            throw new InvalidDateToProductReportException("Invalid date, expected date2 at least one day after date 1 or date2 after date1, date2 cannot be after today.");
         }
 
-        List<SingleProductToReportResponse> productsWithSells = productRepository.findBySellsGreaterThan(0).stream()
-                .map(productMapper::toSingleProductReportResponse).toList();
+        List<MostOrLessSoldProductResponse> productsWithSells = productRepository.findProductsToReportMoreThan0Sells(date1.atStartOfDay(), date2.plusDays(1).atStartOfDay());
 
+        long maxSoldNumber = productsWithSells.stream()
+                .mapToLong(MostOrLessSoldProductResponse::soldUnits).max().orElse(0);
 
+        long minSoldNumber = productsWithSells.stream()
+                .mapToLong(MostOrLessSoldProductResponse::soldUnits).min().orElse(0);
 
-//        ProductReportResponse report = new ProductReportResponse(
-//                productsWithSells,
-//
-//        );
+        List<MostOrLessSoldProductResponse> maxSoldProducts = productsWithSells.stream()
+                .filter(product -> product.soldUnits() == maxSoldNumber).toList();
 
-        return null;
+        List<MostOrLessSoldProductResponse> minSoldProducts = productsWithSells.stream()
+                .filter(product -> product.soldUnits() == minSoldNumber).toList();
+
+        boolean mostIsMoreThanOne = maxSoldProducts.size() > 1;
+        boolean lessIsMoreThanOne = minSoldProducts.size() > 1;
+
+        return new ProductReportResponse(
+                productsWithSells,
+                mostIsMoreThanOne ? null : maxSoldProducts.getFirst().productName(),
+                lessIsMoreThanOne ? null : minSoldProducts.getFirst().productName(),
+                mostIsMoreThanOne ? maxSoldProducts : null,
+                lessIsMoreThanOne ? minSoldProducts : null
+        );
     }
 
     @Override
