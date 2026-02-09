@@ -42,6 +42,9 @@ public class Product {
     @Column(nullable = false)
     private boolean available = false;
 
+    @Column(nullable = false)
+    private Integer sells = 0;
+
     public Product(String name, ProductCategoryEnum category, String description, BigDecimal price, boolean available) {
         this.name = name;
         this.category = category;
