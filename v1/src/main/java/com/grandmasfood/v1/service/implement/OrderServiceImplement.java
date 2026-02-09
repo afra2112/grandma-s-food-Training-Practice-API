@@ -45,7 +45,7 @@ public class OrderServiceImplement implements OrderService {
 
     @Override
     public OrderResponse updateDeliveryTime(UUID orderUUID, LocalDateTime timestamp) {
-        Order order = orderRepository.findByOrderUUID(orderUUID).orElseThrow(
+        Order order = orderRepository.findByOrderUUIDAndDeletedFalse(orderUUID).orElseThrow(
                 () -> new EntityNotFoundException(Order.class.getSimpleName(), orderUUID.toString())
         );
 

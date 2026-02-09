@@ -57,6 +57,9 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime deliveryDate = null;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     @PrePersist
     private void generateUUID(){
         if (orderUUID == null){
