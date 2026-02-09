@@ -1,5 +1,6 @@
 package com.grandmasfood.v1.controller;
 
+import com.grandmasfood.v1.dto.ProductReportResponse;
 import com.grandmasfood.v1.dto.ProductRequest;
 import com.grandmasfood.v1.dto.ProductResponse;
 import com.grandmasfood.v1.service.ProductService;
@@ -7,11 +8,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,5 +51,17 @@ public class ProductController {
     @GetMapping("/search")
     public ResponseEntity<List<ProductResponse>> getByFantasyNameLike(@RequestParam String q){
         return ResponseEntity.ok(productService.findByFantasyNameLike(q));
+    }
+
+    @GetMapping("/sales_report/{date1}/{date2}")
+    public ResponseEntity<ProductReportResponse> generateProductReport(
+            @PathVariable
+            @DateTimeFormat(pattern = "YYYYMMDD")
+            LocalDateTime date1,
+            @PathVariable
+            @DateTimeFormat(pattern = "YYYYMMDD")
+            LocalDateTime date2
+    ){
+        return ResponseEntity.ok(productService.generateReportByDatesRange(date1,date2));
     }
 }

@@ -2,6 +2,7 @@ package com.grandmasfood.v1.config.exception;
 
 import com.grandmasfood.v1.config.enums.ErrorCodeEnum;
 import com.grandmasfood.v1.exception.EntityNotFoundException;
+import com.grandmasfood.v1.exception.InvalidDateToProductReportException;
 import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
 import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
@@ -117,6 +118,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(buildApiError(
                         ErrorCodeEnum.ERR008,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
+
+    @ExceptionHandler(InvalidDateToProductReportException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidDateToProductReportException(InvalidDateToProductReportException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildApiError(
+                        ErrorCodeEnum.ERR009,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));

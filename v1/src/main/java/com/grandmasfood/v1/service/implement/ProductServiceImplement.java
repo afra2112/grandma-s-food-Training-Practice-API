@@ -1,17 +1,20 @@
 package com.grandmasfood.v1.service.implement;
 
 import com.grandmasfood.v1.config.mapper.ProductMapper;
+import com.grandmasfood.v1.dto.ProductReportResponse;
 import com.grandmasfood.v1.dto.ProductRequest;
 import com.grandmasfood.v1.dto.ProductResponse;
 import com.grandmasfood.v1.entity.Product;
 import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
 import com.grandmasfood.v1.exception.EntityNotFoundException;
+import com.grandmasfood.v1.exception.InvalidDateToProductReportException;
 import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
 import com.grandmasfood.v1.repository.ProductRepository;
 import com.grandmasfood.v1.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -72,6 +75,16 @@ public class ProductServiceImplement implements ProductService {
         return productRepository.findByNameContainingIgnoreCase(q).stream().map(
                 productMapper::toDto
         ).toList();
+    }
+
+    @Override
+    public ProductReportResponse generateReportByDatesRange(LocalDateTime date1, LocalDateTime date2) {
+        if (date2.isBefore(date1) || date2.isBefore(date1.plusDays(1))){
+            throw new InvalidDateToProductReportException("Invalid date, expected date2 at least one day after date 1 or date2 after date1");
+        }
+
+
+        return null;
     }
 
     private Product mapEntityToUpdate(Product product, ProductRequest request){
