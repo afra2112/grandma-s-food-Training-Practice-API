@@ -2,6 +2,7 @@ package com.grandmasfood.v1.config.mapper;
 
 import com.grandmasfood.v1.dto.ProductRequest;
 import com.grandmasfood.v1.dto.ProductResponse;
+import com.grandmasfood.v1.dto.SingleProductToReportResponse;
 import com.grandmasfood.v1.entity.Product;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,13 @@ public class ProductMapper {
                 entity.getDescription(),
                 entity.getBasePrice(),
                 entity.isAvailable()
+        );
+    }
+
+    public SingleProductToReportResponse toSingleProductReportResponse(Product entity){
+        return new SingleProductToReportResponse(
+                entity.getSells(),
+                entity.getBasePrice()
         );
     }
 

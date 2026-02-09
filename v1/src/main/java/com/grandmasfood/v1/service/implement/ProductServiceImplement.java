@@ -4,6 +4,7 @@ import com.grandmasfood.v1.config.mapper.ProductMapper;
 import com.grandmasfood.v1.dto.ProductReportResponse;
 import com.grandmasfood.v1.dto.ProductRequest;
 import com.grandmasfood.v1.dto.ProductResponse;
+import com.grandmasfood.v1.dto.SingleProductToReportResponse;
 import com.grandmasfood.v1.entity.Product;
 import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
 import com.grandmasfood.v1.exception.EntityNotFoundException;
@@ -84,6 +85,15 @@ public class ProductServiceImplement implements ProductService {
             throw new InvalidDateToProductReportException("Invalid date, expected date2 at least one day after date 1 or date2 after date1");
         }
 
+        List<SingleProductToReportResponse> productsWithSells = productRepository.findBySellsGreaterThan(0).stream()
+                .map(productMapper::toSingleProductReportResponse).toList();
+
+
+
+//        ProductReportResponse report = new ProductReportResponse(
+//                productsWithSells,
+//
+//        );
 
         return null;
     }

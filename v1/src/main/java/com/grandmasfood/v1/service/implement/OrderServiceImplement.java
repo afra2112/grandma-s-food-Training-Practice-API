@@ -36,9 +36,9 @@ public class OrderServiceImplement implements OrderService {
 
         BigDecimal subtotal = calculateSubtotal(product.getBasePrice(), request.quantity());
 
-        Order order = orderRepository.save(buildOrderToCreate(request, customer, product, subtotal));
+        productService.increaseSells(product.getProductId(), request.quantity());
 
-        productService.increaseSells(order.getOrderUUID(), request.quantity());
+        Order order = orderRepository.save(buildOrderToCreate(request, customer, product, subtotal));
 
         return orderMapper.toDtoResponse(order);
     }

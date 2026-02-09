@@ -22,6 +22,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByNameContainingIgnoreCase(String q);
 
+    List<Product> findBySellsGreaterThan(Integer sellsIsGreaterThan);
+
+    @Query("SELECT p FROM Product p WHERE p.sells = (SELECT MAX(p.sells) FROM Product  p)")
+    List<Product> findMostSoldProducts();
+
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Product p SET p.sells = p.sells + :quantity WHERE p.productId = :id")
     int increaseSellsAtomic(@Param("id") UUID id, @Param("quantity") Integer quantity);
