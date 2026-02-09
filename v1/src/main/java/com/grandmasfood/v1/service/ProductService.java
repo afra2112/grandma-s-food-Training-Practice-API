@@ -26,4 +26,6 @@ public interface ProductService {
     List<ProductResponse> findByFantasyNameLike(String q);
 
     ProductReportResponse generateReportByDatesRange(LocalDateTime date1, LocalDateTime date2);
+
+    void increaseSells(UUID productUUID, Integer quantity);
 }

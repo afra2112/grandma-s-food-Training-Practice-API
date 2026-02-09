@@ -13,6 +13,7 @@ import com.grandmasfood.v1.repository.ProductRepository;
 import com.grandmasfood.v1.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -85,6 +86,12 @@ public class ProductServiceImplement implements ProductService {
 
 
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void increaseSells(UUID productUUID, Integer quantity) {
+        productRepository.increaseSellsAtomic(productUUID, quantity);
     }
 
     private Product mapEntityToUpdate(Product product, ProductRequest request){
