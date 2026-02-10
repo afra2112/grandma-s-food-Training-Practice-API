@@ -13,7 +13,7 @@ import com.grandmasfood.v1.service.OrderService;
 import com.grandmasfood.v1.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,18 +28,23 @@ public class OrderServiceImplement implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
+    @Transactional
     public OrderResponse createOrder(OrderRequest request) {
         Product product = productService.findByUUIDName(request.productId());
         Customer customer = customerService.findByDocument(request.customerDocument());
 
         BigDecimal subtotal = calculateSubtotal(product.getBasePrice(), request.quantity());
 
-        return orderMapper.toDtoResponse(orderRepository.save(buildOrderToCreate(request, customer, product, subtotal)));
+        productService.increaseSells(product.getProductId(), request.quantity());
+
+        Order order = orderRepository.save(buildOrderToCreate(request, customer, product, subtotal));
+
+        return orderMapper.toDtoResponse(order);
     }
 
     @Override
     public OrderResponse updateDeliveryTime(UUID orderUUID, LocalDateTime timestamp) {
-        Order order = orderRepository.findByOrderUUID(orderUUID).orElseThrow(
+        Order order = orderRepository.findByOrderUUIDAndDeletedFalse(orderUUID).orElseThrow(
                 () -> new EntityNotFoundException(Order.class.getSimpleName(), orderUUID.toString())
         );
 

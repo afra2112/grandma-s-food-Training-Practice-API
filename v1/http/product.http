@@ -1,0 +1,35 @@
+POST http://localhost:8080/api/v1/products
+Content-Type: application/json
+
+{
+  "fantasyName": "Non sales product",
+  "category": "FISH",
+  "description": "non sales",
+  "price": 2000.00,
+  "available": true
+}
+###
+
+GET http://localhost:8080/api/v1/products/13f9ef23-7a9f-4221-8191-e1b16d355708
+###
+
+PUT http://localhost:8080/api/v1/products/7e94b163-48ea-4e95-a066-ce3624c313fc
+Content-Type: application/json
+
+{
+  "fantasyName": "CHEESE BURGER",
+  "category": "HAMBURGERS_AND_HOTDOGS",
+  "description": "Two breads, one meat and one slice of american cheese",
+  "price": 35000.00,
+  "available": true
+}
+###
+
+DELETE http://localhost:8080/api/v1/products/5db95527-72d4-4856-9a8d-13f3f33f4dc6
+###
+
+GET http://localhost:8080/api/v1/products/search
+###
+
+GET http://localhost:8080/api/v1/products/sales_report/20260101/20260209
+###

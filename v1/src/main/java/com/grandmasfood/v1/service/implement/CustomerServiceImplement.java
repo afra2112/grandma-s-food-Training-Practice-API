@@ -55,10 +55,12 @@ public class CustomerServiceImplement implements CustomerService {
 
     @Override
     public void deleteCustomerByDocument(String document) {
+
         Customer customer = customerRepository.findByDocumentAndDeletedFalse(document).orElseThrow(
                 () -> new EntityNotFoundException(Customer.class.getSimpleName(), document)
         );
 
+        customer.getOrders().forEach(order -> order.setDeleted(true));
         customer.setDeleted(true);
         customerRepository.save(customer);
     }

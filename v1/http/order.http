@@ -1,0 +1,14 @@
+POST http://localhost:8080/api/v1/orders
+Content-Type: application/json
+
+{
+  "customerDocument": "CC-1094247745",
+  "productId": "7e94b163-48ea-4e95-a066-ce3624c313fc",
+  "quantity": 1,
+  "additionalInfo": ""
+}
+
+###
+
+PATCH http://localhost:8080/api/v1/orders/f9a0a9d4-d56b-4486-b471-939724a74efa/delivered/2012-02-12T19:15:00
+###

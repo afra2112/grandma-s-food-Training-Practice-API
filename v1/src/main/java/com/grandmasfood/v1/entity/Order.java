@@ -54,8 +54,10 @@ public class Order {
     private BigDecimal total;
     @Column(nullable = false)
     private boolean delivered = false;
-    @Column(nullable = false)
     private LocalDateTime deliveryDate = null;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     @PrePersist
     private void generateUUID(){

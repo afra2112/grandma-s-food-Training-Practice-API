@@ -2,6 +2,7 @@ package com.grandmasfood.v1.config.exception;
 
 import com.grandmasfood.v1.config.enums.ErrorCodeEnum;
 import com.grandmasfood.v1.exception.EntityNotFoundException;
+import com.grandmasfood.v1.exception.InvalidDateToProductReportException;
 import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
 import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
 import jakarta.validation.ConstraintViolationException;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 @RestControllerAdvice
@@ -101,7 +103,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiErrorResponse> handleUUIDValidatorException(MethodArgumentNotValidException ex){
+    public ResponseEntity<ApiErrorResponse> handleUUIDValidatorException(MethodArgumentTypeMismatchException ex){
+        if (ex.getRequiredType() == LocalDate.class){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(buildApiError(
+                            ErrorCodeEnum.ERR010,
+                            "Invalid date format, expected yyyyMMdd. MM cannot be grater than 12 and dd cannot be grater than 31",
+                            "InvalidDateFormat"
+                    ));
+        }
+
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(buildApiError(
@@ -117,6 +129,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(buildApiError(
                         ErrorCodeEnum.ERR008,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
+
+    @ExceptionHandler(InvalidDateToProductReportException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidDateToProductReportException(InvalidDateToProductReportException ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildApiError(
+                        ErrorCodeEnum.ERR009,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));

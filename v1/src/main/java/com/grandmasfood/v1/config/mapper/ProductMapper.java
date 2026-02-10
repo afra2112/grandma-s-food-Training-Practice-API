@@ -1,5 +1,6 @@
 package com.grandmasfood.v1.config.mapper;
 
+import com.grandmasfood.v1.dto.MostOrLessSoldProductResponse;
 import com.grandmasfood.v1.dto.ProductRequest;
 import com.grandmasfood.v1.dto.ProductResponse;
 import com.grandmasfood.v1.entity.Product;
@@ -16,6 +17,14 @@ public class ProductMapper {
                 entity.getDescription(),
                 entity.getBasePrice(),
                 entity.isAvailable()
+        );
+    }
+
+    public MostOrLessSoldProductResponse toMostOrLessProductResponse(Product entity){
+        return new MostOrLessSoldProductResponse(
+                entity.getName(),
+                Long.valueOf(entity.getSells()),
+                entity.getBasePrice()
         );
     }
 
