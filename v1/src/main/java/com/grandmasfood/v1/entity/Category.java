@@ -1,7 +1,6 @@
 package com.grandmasfood.v1.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +8,6 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "categories")
 public class Category {
@@ -18,8 +16,16 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long categoryId;
 
+    @Column(nullable = false, unique = true)
     private String name;
 
-    private Integer order;
+    @Column(nullable = false)
+    private Integer displayOrder;
 
+    private boolean deleted = false;
+
+    public Category(String name, Integer order){
+        this.name = name;
+        this.displayOrder = order;
+    }
 }
