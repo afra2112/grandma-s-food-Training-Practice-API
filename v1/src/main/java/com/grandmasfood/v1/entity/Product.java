@@ -29,10 +29,6 @@ public class Product {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ProductCategoryEnum category;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
@@ -45,7 +41,11 @@ public class Product {
     @Column(nullable = false)
     private Integer sells = 0;
 
-    public Product(String name, ProductCategoryEnum category, String description, BigDecimal price, boolean available) {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Product(String name, String description, Category category, BigDecimal price, boolean available) {
         this.name = name;
         this.category = category;
         this.description = description;

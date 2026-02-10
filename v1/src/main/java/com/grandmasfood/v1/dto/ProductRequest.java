@@ -1,6 +1,5 @@
 package com.grandmasfood.v1.dto;
 
-import com.grandmasfood.v1.config.enums.ProductCategoryEnum;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
@@ -10,7 +9,7 @@ public record ProductRequest(
         String fantasyName,
 
         @NotNull
-        ProductCategoryEnum category,
+        Long categoryId,
 
         @NotBlank
         String description,
