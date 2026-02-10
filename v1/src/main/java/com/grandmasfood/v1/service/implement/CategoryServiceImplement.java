@@ -30,7 +30,7 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public CategoryResponse createCategory(CategoryRequest request) {
-        validateNonDuplicates(request);
+        validateNonDuplicatesCreate(request);
         return categoryMapper.toDtoResponse(categoryRepository.save(categoryMapper.toEntity(request)));
     }
 
@@ -48,15 +48,12 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
-        validateNonDuplicates(request);
+        validateNonDuplicatesUpdate(request, id);
 
         Category category = categoryRepository.findByCategoryIdAndDeletedFalse(id).orElseThrow(
                 () -> handleOrElseThrow(String.valueOf(id))
         );
-        category.setName(request.name());
-        category.setDisplayOrder(request.position());
-
-        return categoryMapper.toDtoResponse(categoryRepository.save(category));
+        return categoryMapper.toDtoResponse(categoryRepository.save(categoryMapper.toEntityUpdate(request, category)));
     }
 
     @Override
@@ -69,12 +66,17 @@ public class CategoryServiceImplement implements CategoryService {
         categoryRepository.save(category);
     }
 
-    private void validateNonDuplicates(CategoryRequest request){
-        if (categoryRepository.existsByNameAndDeletedFalse(request.name())){
+    private void validateNonDuplicatesCreate(CategoryRequest request){
+        if (categoryRepository.existsByNameOrDisplayOrderAndDeletedFalse(request.name(), request.position())){
             throw new EntityAlreadyExistsException(Category.class.getSimpleName(), request.name());
         }
+    }
 
-        if (categoryRepository.existsByDisplayOrderAndDeletedFalse(request.position())){
+    private void validateNonDuplicatesUpdate(CategoryRequest request, Long id){
+        if (categoryRepository.existsByNameAndDeletedFalseAndCategoryIdNot(request.name(), id)){
+            throw new EntityAlreadyExistsException(Category.class.getSimpleName(), request.name());
+        }
+        if (categoryRepository.existsByDisplayOrderAndDeletedFalseAndCategoryIdNot(request.position(), id)){
             throw new CategoryAlreadyHasDisplayOrder(request.position());
         }
     }

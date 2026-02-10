@@ -23,4 +23,10 @@ public class CategoryMapper {
                 request.position()
         );
     }
+
+    public Category toEntityUpdate(CategoryRequest request, Category category){
+        category.setName(request.name());
+        category.setDisplayOrder(request.position());
+        return category;
+    }
 }
