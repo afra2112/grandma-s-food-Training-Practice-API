@@ -1,10 +1,7 @@
 package com.grandmasfood.v1.config.exception;
 
 import com.grandmasfood.v1.config.enums.ErrorCodeEnum;
-import com.grandmasfood.v1.exception.EntityNotFoundException;
-import com.grandmasfood.v1.exception.InvalidDateToProductReportException;
-import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
-import com.grandmasfood.v1.exception.EntityAlreadyExistsException;
+import com.grandmasfood.v1.exception.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -140,6 +137,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(buildApiError(
                         ErrorCodeEnum.ERR009,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
+
+    @ExceptionHandler(CategoryAlreadyHasDisplayOrder.class)
+    public ResponseEntity<ApiErrorResponse> handleCategoryNotRepeatedOrder(CategoryAlreadyHasDisplayOrder ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildApiError(
+                        ErrorCodeEnum.ERR011,
                         ex.getMessage(),
                         ex.getClass().getSimpleName()
                 ));
