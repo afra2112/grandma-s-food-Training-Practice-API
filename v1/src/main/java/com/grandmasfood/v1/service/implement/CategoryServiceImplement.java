@@ -23,7 +23,7 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public Category getCategoryById(Long categoryId) {
-        return categoryRepository.findByCategoryId(categoryId).orElseThrow(
+        return categoryRepository.findByCategoryIdAndDeletedFalse(categoryId).orElseThrow(
                 () -> new EntityNotFoundException(Category.class.getSimpleName(), String.valueOf(categoryId))
         );
     }
@@ -36,13 +36,13 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public CategoryResponse getCategoryByIdDTO(Long categoryId) {
-        return categoryMapper.toDtoResponse(categoryRepository.findByCategoryId(categoryId).orElseThrow(
+        return categoryMapper.toDtoResponse(categoryRepository.findByCategoryIdAndDeletedFalse(categoryId).orElseThrow(
                 () -> handleOrElseThrow(String.valueOf(categoryId))));
     }
 
     @Override
     public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAll().stream()
+        return categoryRepository.findByDeletedFalse().stream()
                 .map(categoryMapper::toDtoResponse).toList();
     }
 
@@ -50,7 +50,7 @@ public class CategoryServiceImplement implements CategoryService {
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         validateNonDuplicates(request);
 
-        Category category = categoryRepository.findByCategoryId(id).orElseThrow(
+        Category category = categoryRepository.findByCategoryIdAndDeletedFalse(id).orElseThrow(
                 () -> handleOrElseThrow(String.valueOf(id))
         );
         category.setName(request.name());
@@ -59,17 +59,27 @@ public class CategoryServiceImplement implements CategoryService {
         return categoryMapper.toDtoResponse(categoryRepository.save(category));
     }
 
+    @Override
+    public void deleteCategory(Long id) {
+        Category category = categoryRepository.findByCategoryIdAndDeletedFalse(id).orElseThrow(
+                () -> handleOrElseThrow(String.valueOf(id))
+        );
+
+        category.setDeleted(true);
+        categoryRepository.save(category);
+    }
+
     private void validateNonDuplicates(CategoryRequest request){
-        if (categoryRepository.existsByName(request.name())){
+        if (categoryRepository.existsByNameAndDeletedFalse(request.name())){
             throw new EntityAlreadyExistsException(Category.class.getSimpleName(), request.name());
         }
 
-        if (categoryRepository.existsByDisplayOrder(request.position())){
+        if (categoryRepository.existsByDisplayOrderAndDeletedFalse(request.position())){
             throw new CategoryAlreadyHasDisplayOrder(request.position());
         }
     }
 
-    private EntityAlreadyExistsException handleOrElseThrow(String identification){
-        return new EntityAlreadyExistsException(Category.class.getSimpleName(), identification);
+    private EntityNotFoundException handleOrElseThrow(String identification){
+        return new EntityNotFoundException(Category.class.getSimpleName(), identification);
     }
 }

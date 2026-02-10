@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +40,11 @@ public class CategoryController {
     @PutMapping("/{id}")
     public ResponseEntity<CategoryResponse> updateCategory(@PathVariable @NotNull @Positive Long id, @RequestBody CategoryRequest request){
         return ResponseEntity.ok(categoryService.updateCategory(id,request));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteCategory(@PathVariable @NotNull @Positive Long id){
+        categoryService.deleteCategory(id);
+        return ResponseEntity.ok(HttpStatus.NO_CONTENT);
     }
 }
