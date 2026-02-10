@@ -4,6 +4,7 @@ import com.grandmasfood.v1.dto.CategoryRequest;
 import com.grandmasfood.v1.dto.CategoryResponse;
 import com.grandmasfood.v1.service.CategoryService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,17 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryResponse> getById(@PathVariable @Positive Long id){
+    public ResponseEntity<CategoryResponse> getById(@PathVariable @NotNull @Positive Long id){
         return ResponseEntity.ok(categoryService.getCategoryByIdDTO(id));
     }
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAll(){
         return ResponseEntity.ok(categoryService.getAllCategories());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable @NotNull @Positive Long id, @RequestBody CategoryRequest request){
+        return ResponseEntity.ok(categoryService.updateCategory(id,request));
     }
 }

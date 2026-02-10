@@ -30,6 +30,36 @@ public class CategoryServiceImplement implements CategoryService {
 
     @Override
     public CategoryResponse createCategory(CategoryRequest request) {
+        validateNonDuplicates(request);
+        return categoryMapper.toDtoResponse(categoryRepository.save(categoryMapper.toEntity(request)));
+    }
+
+    @Override
+    public CategoryResponse getCategoryByIdDTO(Long categoryId) {
+        return categoryMapper.toDtoResponse(categoryRepository.findByCategoryId(categoryId).orElseThrow(
+                () -> handleOrElseThrow(String.valueOf(categoryId))));
+    }
+
+    @Override
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll().stream()
+                .map(categoryMapper::toDtoResponse).toList();
+    }
+
+    @Override
+    public CategoryResponse updateCategory(Long id, CategoryRequest request) {
+        validateNonDuplicates(request);
+
+        Category category = categoryRepository.findByCategoryId(id).orElseThrow(
+                () -> handleOrElseThrow(String.valueOf(id))
+        );
+        category.setName(request.name());
+        category.setDisplayOrder(request.position());
+
+        return categoryMapper.toDtoResponse(categoryRepository.save(category));
+    }
+
+    private void validateNonDuplicates(CategoryRequest request){
         if (categoryRepository.existsByName(request.name())){
             throw new EntityAlreadyExistsException(Category.class.getSimpleName(), request.name());
         }
@@ -37,19 +67,9 @@ public class CategoryServiceImplement implements CategoryService {
         if (categoryRepository.existsByDisplayOrder(request.position())){
             throw new CategoryAlreadyHasDisplayOrder(request.position());
         }
-
-        return categoryMapper.toDtoResponse(categoryRepository.save(categoryMapper.toEntity(request)));
     }
 
-    @Override
-    public CategoryResponse getCategoryByIdDTO(Long categoryId) {
-        return categoryMapper.toDtoResponse(categoryRepository.findByCategoryId(categoryId).orElseThrow(
-                () -> new EntityNotFoundException(Category.class.getSimpleName(), String.valueOf(categoryId))));
-    }
-
-    @Override
-    public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAll().stream()
-                .map(categoryMapper::toDtoResponse).toList();
+    private EntityAlreadyExistsException handleOrElseThrow(String identification){
+        return new EntityAlreadyExistsException(Category.class.getSimpleName(), identification);
     }
 }

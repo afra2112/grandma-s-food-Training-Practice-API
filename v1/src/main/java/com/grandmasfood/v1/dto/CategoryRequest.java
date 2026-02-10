@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 public record CategoryRequest (
         @NotBlank
         String name,
+
         @Positive
         @NotNull
         Integer position
