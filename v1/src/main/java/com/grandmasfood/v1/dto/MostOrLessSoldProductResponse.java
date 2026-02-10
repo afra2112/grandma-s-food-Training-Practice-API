@@ -5,5 +5,9 @@ import java.math.BigDecimal;
 public record MostOrLessSoldProductResponse(
         String productName,
         Long soldUnits,
-        BigDecimal grossIncome
-) { }
+        BigDecimal basePrice
+) {
+    public BigDecimal getGrossIncome(){
+        return basePrice.multiply(BigDecimal.valueOf(soldUnits));
+    }
+}
