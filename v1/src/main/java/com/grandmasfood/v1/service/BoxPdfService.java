@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -102,7 +104,7 @@ public class BoxPdfService {
         contentStream.setLeading(20);
         contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 15);
         contentStream.setNonStrokingColor(Color.BLACK);
-        contentStream.showText(product.getName() + "..............  $. " + String.valueOf(product.getBasePrice()));
+        contentStream.showText(product.getName() + "..............  $. " + String.valueOf(product.getBasePrice().multiply(BigDecimal.valueOf(1.19)).setScale(2, RoundingMode.HALF_DOWN)));
         contentStream.newLine();
     }
 

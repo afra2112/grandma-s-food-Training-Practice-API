@@ -14,7 +14,6 @@ public class MenuServiceImplement implements MenuService {
     private final BoxPdfService boxPdfService;
     private final CategoryService categoryService;
 
-
     public byte[] generateMenu(String contentTypeHeader) throws IOException {
         return switch (contentTypeHeader) {
             case "application/pdf" -> generatePdf();
