@@ -66,6 +66,11 @@ public class CategoryServiceImplement implements CategoryService {
         categoryRepository.save(category);
     }
 
+    @Override
+    public List<Category> getAllCategoriesOrderedByDisplayOrder() {
+        return categoryRepository.getCategoriesWithProductsAndOrderedByDisplayOrder();
+    }
+
     private void validateNonDuplicatesCreate(CategoryRequest request){
         if (categoryRepository.existsByNameOrDisplayOrderAndDeletedFalse(request.name(), request.position())){
             throw new EntityAlreadyExistsException(Category.class.getSimpleName(), request.name());

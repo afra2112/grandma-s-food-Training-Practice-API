@@ -1,5 +1,6 @@
 package com.grandmasfood.v1.service.implement;
 import com.grandmasfood.v1.service.BoxPdfService;
+import com.grandmasfood.v1.service.CategoryService;
 import com.grandmasfood.v1.service.MenuService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,9 @@ import java.io.IOException;
 public class MenuServiceImplement implements MenuService {
 
     private final BoxPdfService boxPdfService;
+    private final CategoryService categoryService;
 
-    @Override
+
     public byte[] generateMenu(String contentTypeHeader) throws IOException {
         return switch (contentTypeHeader) {
             case "application/pdf" -> generatePdf();
@@ -23,7 +25,7 @@ public class MenuServiceImplement implements MenuService {
     }
 
     private byte[] generatePdf() throws IOException {
-        return boxPdfService.generatePdfMenu();
+        return boxPdfService.generatePdfMenu(categoryService.getAllCategoriesOrderedByDisplayOrder());
     }
 
     private byte[] generateWord(){

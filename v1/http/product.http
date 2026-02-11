@@ -2,10 +2,10 @@ POST http://localhost:8080/api/v1/products
 Content-Type: application/json
 
 {
-  "fantasyName": "Hambuer",
-  "category": 1,
-  "description": "non sales",
-  "price": 2000.00,
+  "fantasyName": "California Sushi Roll",
+  "categoryId": 2,
+  "description": "12 pieces Sushi roll with rice, avocado, cream cheese and crab palm",
+  "price": 15.00,
   "available": true
 }
 ###

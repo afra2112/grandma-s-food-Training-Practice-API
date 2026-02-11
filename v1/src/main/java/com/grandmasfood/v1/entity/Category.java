@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -23,6 +25,9 @@ public class Category {
     private Integer displayOrder;
 
     private boolean deleted = false;
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
 
     public Category(String name, Integer order){
         this.name = name;

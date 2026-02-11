@@ -2,8 +2,8 @@ POST http://localhost:8080/api/v1/categories
 Content-Type: application/json
 
 {
-  "name": "Drinks",
-  "position": 5
+  "name": "Hot Dogs",
+  "position": 4
 }
 ###
 
