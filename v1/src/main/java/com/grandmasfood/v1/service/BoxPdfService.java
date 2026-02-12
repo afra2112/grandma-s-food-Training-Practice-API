@@ -101,11 +101,13 @@ public class BoxPdfService {
     }
 
     private void putProductNameAndPrice(PDPageContentStream contentStream, Product product) throws IOException {
-        contentStream.setLeading(20);
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 15);
-        contentStream.setNonStrokingColor(Color.BLACK);
-        contentStream.showText(product.getName() + "..............  $. " + String.valueOf(product.getBasePrice().multiply(BigDecimal.valueOf(1.19)).setScale(2, RoundingMode.HALF_DOWN)));
-        contentStream.newLine();
+        if (product.isAvailable()){
+            contentStream.setLeading(20);
+            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 15);
+            contentStream.setNonStrokingColor(Color.BLACK);
+            contentStream.showText(product.getName() + "..............  $. " + String.valueOf(product.getBasePrice().multiply(BigDecimal.valueOf(1.19)).setScale(2, RoundingMode.HALF_DOWN)));
+            contentStream.newLine();
+        }
     }
 
     private void putProductDescriptionIfExists(PDPageContentStream contentStream, Product product) throws IOException {

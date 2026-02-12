@@ -2,6 +2,7 @@ package com.grandmasfood.v1.controller;
 
 import com.grandmasfood.v1.service.MenuService;
 import lombok.AllArgsConstructor;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,10 @@ public class MenuController {
     private final MenuService menuService;
 
     @GetMapping
-    public ResponseEntity<byte[]> generateMenu(@RequestHeader(value = "Content-Type") String contentTypeHeader) throws IOException {
+    public ResponseEntity<byte[]> generateMenu(@RequestHeader(value = "Content-Type") String contentTypeHeader) throws Exception {
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"menu.pdf\"")
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"menu.docx\"")
                 .body(menuService.generateMenu(contentTypeHeader));
     }
 }
