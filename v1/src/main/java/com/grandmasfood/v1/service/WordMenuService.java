@@ -84,7 +84,6 @@ public class WordMenuService {
         );
 
         for (Category category : categories){
-            //category titlle
             XWPFParagraph categoryTittle = document.createParagraph();
             categoryTittle.setAlignment(ParagraphAlignment.LEFT);
             XWPFRun tittleRun = categoryTittle.createRun();

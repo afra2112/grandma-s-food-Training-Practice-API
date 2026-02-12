@@ -16,9 +16,9 @@ public class PlainTextMenuService {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("====================================\n");
+        sb.append("==========================================================================\n");
         sb.append("               GRANDMAS FOOD MENU\n");
-        sb.append("====================================\n\n");
+        sb.append("==========================================================================\n\n");
         sb.append("See all our food categories with all our best flavors and amazing prices.!\n\n");
 
         for (Category category : categories) {
