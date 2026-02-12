@@ -1,12 +1,11 @@
 package com.grandmasfood.v1.service.implement;
-import com.grandmasfood.v1.service.BoxPdfService;
-import com.grandmasfood.v1.service.CategoryService;
-import com.grandmasfood.v1.service.MenuService;
-import com.grandmasfood.v1.service.WordMenuService;
+import com.grandmasfood.v1.entity.Category;
+import com.grandmasfood.v1.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -15,6 +14,7 @@ public class MenuServiceImplement implements MenuService {
     private final BoxPdfService boxPdfService;
     private final WordMenuService wordMenuService;
     private final CategoryService categoryService;
+    private final PlainTextMenuService plainTextMenuService;
 
     public byte[] generateMenu(String contentTypeHeader) throws Exception {
         return switch (contentTypeHeader) {
@@ -34,6 +34,6 @@ public class MenuServiceImplement implements MenuService {
     }
 
     private byte[] generatePlainText(){
-        return new byte[0];
+        return plainTextMenuService.generateTextMenu(categoryService.getAllCategoriesOrderedByDisplayOrder());
     }
 }
