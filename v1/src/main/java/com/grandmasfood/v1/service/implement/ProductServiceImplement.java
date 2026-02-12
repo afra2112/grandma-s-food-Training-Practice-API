@@ -8,18 +8,15 @@ import com.grandmasfood.v1.exception.EntityNotFoundException;
 import com.grandmasfood.v1.exception.InvalidDateToProductReportException;
 import com.grandmasfood.v1.exception.SameDataRequestComparedToDBException;
 import com.grandmasfood.v1.repository.ProductRepository;
-import com.grandmasfood.v1.service.OrderService;
+import com.grandmasfood.v1.service.CategoryService;
 import com.grandmasfood.v1.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +24,7 @@ public class ProductServiceImplement implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final CategoryService categoryService;
 
     @Override
     public ProductResponse createProduct(ProductRequest request) {
@@ -120,7 +118,7 @@ public class ProductServiceImplement implements ProductService {
     private Product mapEntityToUpdate(Product product, ProductRequest request){
         product.setAvailable(request.available());
         product.setName(request.fantasyName());
-        product.setCategory(request.category());
+        product.setCategory(categoryService.getCategoryById(request.categoryId()));
         product.setDescription(request.description());
         product.setBasePrice(request.price());
         return product;
@@ -128,7 +126,7 @@ public class ProductServiceImplement implements ProductService {
 
     private void validateAtLeatsOneFieldDifferent(ProductRequest request, Product product){
         boolean sameFantasyName = Objects.equals(request.fantasyName(), product.getName());
-        boolean sameCategory = Objects.equals(request.category(), product.getCategory());
+        boolean sameCategory = Objects.equals(request.categoryId(), product.getCategory().getCategoryId());
         boolean sameDescription = Objects.equals(request.description(), product.getDescription());
         boolean samePrice = Objects.equals(request.price(), product.getBasePrice());
         boolean sameAvailable = request.available() == product.isAvailable();

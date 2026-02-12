@@ -2,10 +2,10 @@ POST http://localhost:8080/api/v1/products
 Content-Type: application/json
 
 {
-  "fantasyName": "Non sales product",
-  "category": "FISH",
-  "description": "non sales",
-  "price": 2000.00,
+  "fantasyName": "American Double Burger",
+  "categoryId": 5,
+  "description": "Brioche bread with two slices of american cheese and two portions of 70g of meat with vegies.",
+  "price": 12.50,
   "available": true
 }
 ###

@@ -1,16 +1,10 @@
 package com.grandmasfood.v1.entity;
 
-import com.grandmasfood.v1.config.enums.ProductCategoryEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -29,10 +23,6 @@ public class Product {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ProductCategoryEnum category;
-
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
@@ -45,7 +35,11 @@ public class Product {
     @Column(nullable = false)
     private Integer sells = 0;
 
-    public Product(String name, ProductCategoryEnum category, String description, BigDecimal price, boolean available) {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "categoryId")
+    private Category category;
+
+    public Product(String name, String description, Category category, BigDecimal price, boolean available) {
         this.name = name;
         this.category = category;
         this.description = description;
