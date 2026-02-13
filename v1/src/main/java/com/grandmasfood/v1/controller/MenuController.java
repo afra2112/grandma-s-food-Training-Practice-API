@@ -18,29 +18,29 @@ public class MenuController {
     private final MenuService menuService;
 
     @GetMapping
-    public ResponseEntity<byte[]> generateMenu(@RequestHeader(value = "Content-Type") String contentTypeHeader) throws Exception {
-        switch (contentTypeHeader){
+    public ResponseEntity<byte[]> generateMenu(@RequestHeader(value = "Accept") String acceptHeader) throws Exception {
+        switch (acceptHeader){
             case "plain/text" -> {
                 return ResponseEntity.ok()
                         .contentType(MediaType.TEXT_PLAIN)
                         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; fileName=\"menu.txt\"")
-                        .body(menuService.generateMenu(contentTypeHeader));
+                        .body(menuService.generateMenu(acceptHeader));
             }
             case "application/pdf" -> {
                 return ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_PDF)
                         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"menu.pdf\"")
-                        .body(menuService.generateMenu(contentTypeHeader));
+                        .body(menuService.generateMenu(acceptHeader));
             }
             case "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> {
                 return ResponseEntity.ok()
                         .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; \"menu.docx\"")
-                        .body(menuService.generateMenu(contentTypeHeader));
+                        .body(menuService.generateMenu(acceptHeader));
             }
         }
 
         return ResponseEntity.badRequest()
-                .body(menuService.generateMenu(contentTypeHeader));
+                .body(menuService.generateMenu(acceptHeader));
     }
 }

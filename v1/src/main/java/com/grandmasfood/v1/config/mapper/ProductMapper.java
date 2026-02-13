@@ -8,6 +8,8 @@ import com.grandmasfood.v1.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 @AllArgsConstructor
 public class ProductMapper {
@@ -20,16 +22,8 @@ public class ProductMapper {
                 entity.getName(),
                 entity.getCategory().getName(),
                 entity.getDescription(),
-                entity.getBasePrice(),
+                entity.getBasePrice().multiply(BigDecimal.valueOf(1.19)),
                 entity.isAvailable()
-        );
-    }
-
-    public MostOrLessSoldProductResponse toMostOrLessProductResponse(Product entity){
-        return new MostOrLessSoldProductResponse(
-                entity.getName(),
-                Long.valueOf(entity.getSells()),
-                entity.getBasePrice()
         );
     }
 

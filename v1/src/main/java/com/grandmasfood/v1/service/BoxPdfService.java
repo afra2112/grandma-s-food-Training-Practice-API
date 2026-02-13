@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
@@ -19,6 +20,9 @@ import java.util.List;
 
 @Service
 public class BoxPdfService {
+
+    private static final PDType1Font TITTLE_FONT = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
+    private static final PDType1Font NORMAL_FONT = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
 
     public byte[] generatePdfMenu(List<Category> categories) throws IOException {
 
@@ -52,13 +56,13 @@ public class BoxPdfService {
     }
 
     private void putImageLogo(PDPageContentStream contentStream, float pageHeight, float pageWidth, PDDocument document) throws IOException {
-        PDImageXObject grandmaImage = PDImageXObject.createFromFile("C:\\Users\\andres.ramirez01\\Desktop\\practices\\Kevin Training\\Grandma's Food Training\\v1\\v1\\src\\main\\resources\\img\\images.png", document);
+        PDImageXObject grandmaImage = PDImageXObject.createFromFileByContent(new ClassPathResource("img/image.png").getFile(), document);
         contentStream.drawImage(grandmaImage, pageWidth-210, pageHeight-220);
     }
 
     private void putMenuMainText(PDPageContentStream contentStream, float pageHeight) throws IOException {
         contentStream.beginText();
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 70);
+        contentStream.setFont(TITTLE_FONT, 70);
         contentStream.setNonStrokingColor(Color.BLACK);
         contentStream.newLineAtOffset(70, pageHeight-70);
         contentStream.showText("Menu");
@@ -68,7 +72,7 @@ public class BoxPdfService {
     private void putDescriptionMainText(PDPageContentStream contentStream, float pageHeight) throws IOException {
         contentStream.beginText();
         contentStream.setLeading(17);
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 17);
+        contentStream.setFont(NORMAL_FONT, 17);
         contentStream.newLineAtOffset(40, pageHeight-120);
         contentStream.showText("See all our food categories with all ");
         contentStream.newLine();
@@ -94,7 +98,7 @@ public class BoxPdfService {
 
     private void putCategoryName(PDPageContentStream contentStream, Category category) throws IOException {
         contentStream.setLeading(35);
-        contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 20);
+        contentStream.setFont(TITTLE_FONT, 20);
         contentStream.setNonStrokingColor(new Color(245, 188, 66));
         contentStream.showText(category.getDisplayOrder() + " - " + category.getName());
         contentStream.newLine();
@@ -103,7 +107,7 @@ public class BoxPdfService {
     private void putProductNameAndPrice(PDPageContentStream contentStream, Product product) throws IOException {
         if (product.isAvailable()){
             contentStream.setLeading(20);
-            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD), 15);
+            contentStream.setFont(TITTLE_FONT, 15);
             contentStream.setNonStrokingColor(Color.BLACK);
             contentStream.showText(product.getName() + "..............  $. " + String.valueOf(product.getBasePrice().multiply(BigDecimal.valueOf(1.19)).setScale(2, RoundingMode.HALF_DOWN)));
             contentStream.newLine();
@@ -112,7 +116,7 @@ public class BoxPdfService {
 
     private void putProductDescriptionIfExists(PDPageContentStream contentStream, Product product) throws IOException {
         if (product.getDescription() != null){
-            contentStream.setFont(new PDType1Font(Standard14Fonts.FontName.HELVETICA), 13);
+            contentStream.setFont(NORMAL_FONT, 13);
             contentStream.showText(product.getDescription());
             contentStream.newLine();
         }
