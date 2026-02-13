@@ -85,6 +85,16 @@ public class ProductServiceImplement implements ProductService {
 
         List<MostOrLessSoldProductResponse> productsWithSells = productRepository.findProductsToReportMoreThan0Sells(date1.atStartOfDay(), date2.plusDays(1).atStartOfDay());
 
+        if (productsWithSells.isEmpty()) {
+            return new ProductReportResponse(
+                    List.of(),
+                    null,
+                    null,
+                    null,
+                    null
+            );
+        }
+
         long maxSoldNumber = productsWithSells.stream()
                 .mapToLong(MostOrLessSoldProductResponse::soldUnits).max().orElse(0);
 
