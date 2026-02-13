@@ -152,4 +152,15 @@ public class GlobalExceptionHandler {
                         ex.getClass().getSimpleName()
                 ));
     }
+
+    @ExceptionHandler(InvalidMediaTypeRequested.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidMediaType(InvalidMediaTypeRequested ex){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildApiError(
+                        ErrorCodeEnum.ERR012,
+                        ex.getMessage(),
+                        ex.getClass().getSimpleName()
+                ));
+    }
 }

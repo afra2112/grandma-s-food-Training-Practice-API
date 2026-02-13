@@ -19,28 +19,17 @@ public class MenuController {
 
     @GetMapping
     public ResponseEntity<byte[]> generateMenu(@RequestHeader(value = "Accept") String acceptHeader) throws Exception {
-        switch (acceptHeader){
-            case "plain/text" -> {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.TEXT_PLAIN)
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; fileName=\"menu.txt\"")
-                        .body(menuService.generateMenu(acceptHeader));
-            }
-            case "application/pdf" -> {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_PDF)
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"menu.pdf\"")
-                        .body(menuService.generateMenu(acceptHeader));
-            }
-            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document" -> {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; \"menu.docx\"")
-                        .body(menuService.generateMenu(acceptHeader));
-            }
-        }
-
-        return ResponseEntity.badRequest()
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(acceptHeader))
+                .header(HttpHeaders.CONTENT_DISPOSITION, buildDisposition(acceptHeader))
                 .body(menuService.generateMenu(acceptHeader));
+    }
+
+    private String buildDisposition(String acceptHeader){
+        return switch (acceptHeader){
+            case MediaType.APPLICATION_PDF_VALUE -> "inline; filename=\"menu.pdf\"";
+            case MediaType.TEXT_PLAIN_VALUE -> "inline; filename=\"menu.txt\"";
+            default -> "attachment; filename=\"menu.docx\"";
+        };
     }
 }

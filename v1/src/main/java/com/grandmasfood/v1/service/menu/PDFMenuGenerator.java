@@ -1,4 +1,4 @@
-package com.grandmasfood.v1.service;
+package com.grandmasfood.v1.service.menu;
 
 import com.grandmasfood.v1.entity.Category;
 import com.grandmasfood.v1.entity.Product;
@@ -10,7 +10,9 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
+
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,14 +20,18 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
-@Service
-public class BoxPdfService {
-
+@Component
+public class PDFMenuGenerator implements MenuGenerator{
     private static final PDType1Font TITTLE_FONT = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
     private static final PDType1Font NORMAL_FONT = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
 
-    public byte[] generatePdfMenu(List<Category> categories) throws IOException {
+    @Override
+    public String supportedMediaType() {
+        return MediaType.APPLICATION_PDF_VALUE;
+    }
 
+    @Override
+    public byte[] generate(List<Category> categories) throws IOException {
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -40,6 +46,8 @@ public class BoxPdfService {
                 putMenuMainText(contentStream, pageHeight);
                 putDescriptionMainText(contentStream, pageHeight);
                 putCategoriesAndProductsSections(contentStream, pageHeight, categories);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -56,7 +64,8 @@ public class BoxPdfService {
     }
 
     private void putImageLogo(PDPageContentStream contentStream, float pageHeight, float pageWidth, PDDocument document) throws IOException {
-        PDImageXObject grandmaImage = PDImageXObject.createFromFileByContent(new ClassPathResource("img/image.png").getFile(), document);
+        ClassPathResource resource = new ClassPathResource("img/images.png");
+        PDImageXObject grandmaImage = PDImageXObject.createFromByteArray(document, resource.getInputStream().readAllBytes(), resource.getFilename());
         contentStream.drawImage(grandmaImage, pageWidth-210, pageHeight-220);
     }
 

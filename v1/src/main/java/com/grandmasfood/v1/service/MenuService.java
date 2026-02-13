@@ -4,6 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface MenuService {
-
     byte[] generateMenu(String contentTypeHeader) throws Exception;
 }
